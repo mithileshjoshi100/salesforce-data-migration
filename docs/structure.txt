@@ -1,0 +1,41 @@
+salesforce_data_migration/
+    ├── app/
+    │   ├── __init__.py
+    │   ├── gui/
+    │   │   └── __init__.py
+    │   ├── data_extraction/
+    │   │   ├── __init__.py
+    │   │   └── extraction.py
+    │   ├── data_insertion/
+    │   │   ├── __init__.py
+    │   │   └── insertion.py
+    │   └── utils/
+    │       ├── __init__.py
+    │       └── lib.py
+    ├── data/
+    │   ├── extraction_data/
+    │   │   ├── *.csv
+    │   │   └── ...
+    │   └── insertion_data/
+    │       ├── *.csv
+    │       └── ...
+    ├── logs/
+    │   ├── extraction.log
+    │   └──insertion.log
+    ├── tests/
+    │   ├── __init__.py
+    │   ├── test_lib.py
+    │   └── ...
+    ├── config/
+    │   ├── credentials/
+    │   │    ├── new_org_credentials.json
+    │   │    └── old_org_credentials.json
+    │   ├── __init__.py
+    │   ├── config.py
+    │   └── ...
+    ├── docs/
+    ├── requirements.txt
+    ├── README.md
+    ├── LICENSE
+    ├── requirements.txt
+    └── main.py

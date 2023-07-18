@@ -1,0 +1,6 @@
+env/
+data/extraction_data/*.csv
+data/insertion_data/*.csv
+logs/*.log
+.DS_Store
+*.pyc
