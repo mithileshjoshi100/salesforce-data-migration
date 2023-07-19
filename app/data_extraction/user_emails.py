@@ -10,5 +10,5 @@
 ### forbidden except by express written permission of ACCENTURE.
 
 emails = [
-    'testft2020auto+acp_004__ji@gmail.com'
+    'testft2020auto+acp_004@gmail.com'
 ]
