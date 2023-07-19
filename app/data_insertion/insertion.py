@@ -198,7 +198,7 @@ def insert_geidp_entitled_feature():
     # insert the records
     for index, row in object_dataframe.iterrows():
         record = lib.filter_record(row)
-        inserted_psa = sf.GEIDP_Customer_App_Role_Access__c.create(record)
+        inserted_psa = sf.GEIDP_Entitled_Feature__c.create(record)
         object_dataframe.at[index, 'new_Id'] = inserted_psa['id']
 
     # export file
