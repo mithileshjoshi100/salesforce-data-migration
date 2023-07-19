@@ -20,6 +20,8 @@ SELECT_OBJECT_LABEL = 'SELECT OBJECT'
 RUN_SCRIPT_BTN = 'Execute Script'
 SHOW_LOGS_BTN = 'show logs'
 SHOW_FILES_BTN = 'show files'
+SHOW_USERS_BTN = 'Locate Users'
+SHOW_CREDS_BTN = 'Locate Creds'
 
 # DO NOT CHANGE THIS
 script_options = [

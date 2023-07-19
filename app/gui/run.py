@@ -51,6 +51,32 @@ def main():
         print('open logs')
         print('show files')
 
+    def show_creds_folder():
+        root = Tk()
+        root.withdraw()
+        print(os.path.dirname(__file__))
+        files_path = Path(os.path.dirname(__file__)).parent.parent
+        files_path = os.path.join(files_path,'config','credentials')
+        root.filename = filedialog.askopenfilename(
+            initialdir=files_path, title="You Data files are hear",
+            filetypes=[("Text Files", "*.json")])
+        print(root.filename)
+        print('open logs')
+        print('show files')
+
+    def show_users_folder():
+        root = Tk()
+        root.withdraw()
+        print(os.path.dirname(__file__))
+        files_path = Path(os.path.dirname(__file__)).parent
+        files_path = os.path.join(files_path,'data_extraction')
+        root.filename = filedialog.askopenfilename(
+            initialdir=files_path, title="You Data files are hear",
+            filetypes=[("Text Files", "*.py")])
+        print(root.filename)
+        print('open logs')
+        print('show files')
+
 
     def script_menu_callback(choice):
         if choice == ms.script_options[1]:
@@ -136,12 +162,23 @@ def main():
     b2 = customtkinter.CTkFrame(show_btn_fream, width=200, height=100)
     b2.grid(row=0, column=1, sticky="nsew")
 
+    show_configbutton = customtkinter.CTkButton(
+        b1, text=ms.SHOW_CREDS_BTN, command=show_creds_folder
+    )
+    show_configbutton.place(relx=0.5, rely=0.7, anchor="center")
+
     show_logsbutton = customtkinter.CTkButton(
         b1, text=ms.SHOW_LOGS_BTN, command=show_log_folder)
-    show_logsbutton.place(relx=0.5, rely=0.5, anchor="center")
+    show_logsbutton.place(relx=0.5, rely=0.3, anchor="center")
+
+    show_usersbutton = customtkinter.CTkButton(
+        b2, text=ms.SHOW_USERS_BTN, command=show_users_folder
+    )
+    show_usersbutton.place(relx=0.5, rely=0.7, anchor="center")
+
     show_filesbutton = customtkinter.CTkButton(
         b2, text=ms.SHOW_FILES_BTN, command=show_files_folder)
-    show_filesbutton.place(relx=0.5, rely=0.5, anchor="center")
+    show_filesbutton.place(relx=0.5, rely=0.3, anchor="center")
 
     app.mainloop()
 
