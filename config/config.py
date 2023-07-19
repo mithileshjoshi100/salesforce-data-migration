@@ -14,12 +14,6 @@ import json
 import os
 import simple_salesforce
 import logging
-logging.basicConfig(
-    level=logging.DEBUG,
-    format="%(asctime)s %(levelname)s %(message)s",
-    datefmt="%Y-%m-%d %H:%M:%S",
-    filename='logs/basic.log'
-)
 
 
 def connect(org_name):

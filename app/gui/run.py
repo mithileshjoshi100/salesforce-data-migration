@@ -16,75 +16,74 @@ import os
 from pathlib import Path
 import app.gui.magic_strings as ms
 import app.gui.call_api as call_api
+import logging
 
 def main():
     def execute_script():
+        logging.debug('Clicked Execution Btn')
         option1 = script_menu.get()
         option2 = object_menu.get()
         call_api._call(option1,option2)
+        logging.debug('Execution Fininshed')
 
 
     def show_log_folder():
+        logging.debug('Clicked show logs Btn')
         root = Tk()
         root.withdraw()
-        print(os.path.dirname(__file__))
         logs_path = Path(os.path.dirname(__file__)).parent.parent
         logs_path = os.path.join(logs_path,'logs')
-        print(logs_path)
+        logging.debug(f'path for logs is {logs_path}')
         root.filename = filedialog.askopenfilename(
             initialdir=logs_path, title="You Logs files are hear",
             filetypes=[("Text Files", "*.log")])
-        print(root.filename)
-        print('open logs')
 
 
     def show_files_folder():
+        logging.debug('Clicked show files Btn')
         root = Tk()
         root.withdraw()
-        print(os.path.dirname(__file__))
         files_path = Path(os.path.dirname(__file__)).parent.parent
         files_path = os.path.join(files_path,'data')
+        logging.debug(f'path for files is {files_path}')
         root.filename = filedialog.askopenfilename(
             initialdir=files_path, title="You Data files are hear",
             filetypes=[("Text Files", "*.csv")])
-        print(root.filename)
-        print('open logs')
-        print('show files')
+
 
     def show_creds_folder():
+        logging.debug('Clicked show creds Btn')
         root = Tk()
         root.withdraw()
-        print(os.path.dirname(__file__))
         files_path = Path(os.path.dirname(__file__)).parent.parent
         files_path = os.path.join(files_path,'config','credentials')
+        logging.debug(f'path for creds is {files_path}')
         root.filename = filedialog.askopenfilename(
             initialdir=files_path, title="You Data files are hear",
             filetypes=[("Text Files", "*.json")])
         print(root.filename)
-        print('open logs')
-        print('show files')
+
 
     def show_users_folder():
+        logging.debug('Clicked show users Btn')
         root = Tk()
         root.withdraw()
         print(os.path.dirname(__file__))
         files_path = Path(os.path.dirname(__file__)).parent
         files_path = os.path.join(files_path,'data_extraction')
+        logging.debug(f'path for users is {files_path}')
         root.filename = filedialog.askopenfilename(
             initialdir=files_path, title="You Data files are hear",
             filetypes=[("Text Files", "*.py")])
-        print(root.filename)
-        print('open logs')
-        print('show files')
 
 
     def script_menu_callback(choice):
         if choice == ms.script_options[1]:
-            print('changed to a')
+            logging.debug('changed to 1')
             object_menu.configure(values=ms.extraction_objects)
             
         if choice == ms.script_options[2]:
-            print('changed to b')
+            logging.debug('changed to 2')
             object_menu.configure(values=ms.insertion_objects)
             
 
