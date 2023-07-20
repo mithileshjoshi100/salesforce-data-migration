@@ -56,12 +56,13 @@ insertion_objects = [
 ]
 
 text1 = 'STEPS'
-text2 = 'Update usre creds in the file \n \\config\\credentials'
-text2 = 'For data extraction add user emails to \n \\app\\data_extraction\\user_emails.py'
-text3 = 'Must extract the data using \n same tool before insertaion'
-text4 = 'if anything fails you will the error \n on output screen'
-text5 = 'check logs for flow of exicution'
-text6 = 'run the insert scripts in sequence \nchiled records must inserted before perent'
-text7 = 'go slow!!!'
+text2 = 'Click on Locate Creads :\n \tupdate creds json files'
+text3 = 'Click on Locate Users :\n \tupdate user_emails.py'
+text4 = 'Restart the application'
+text5 = 'Select Script Type'
+text6 = 'Select Object'
+text7 = 'Click on Execute Script'
+text8 = 'check logs and files'
+text9 = 'Go slow!!!'
 
-text_lst = [text1,text2,text3,text4,text5,text6,text7]
+text_lst = [text1,text2,text3,text4,text5,text6,text7,text8,text9]
