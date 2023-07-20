@@ -26,18 +26,31 @@ Download Python installer: Visit the official Python website (https://www.python
 4. Done with setup!! 🎉
 
 ## How to use 🚀
-1. Verify credentials in the file: config\credentials\ ✅<br>
-```\config\credentials\```
-2. Add user emails in the python file: app\data_extraction\user_emails.py  ✉️<br>```app\data_extraction\user_emails.py```
-3. Open the terminal/powershell in the project folder and run the command:
+1. Open the terminal/powershell in the project folder and run the command:✅<br>
     ```
-    python main_gui.py
+    python main.py
     ```
-4. Check logs here (clear old logs before fresh execution): 📜<br>
-    ``logs\basic.log``
-5. Trace data files: <br>
-    Extracted files: ``data\extraction_data`` 📂<br>
-    Inserted files with new ids: ``data\insertion_data`` 📂
+
+2. Click on Locate Creads then update creds json files, <br>
+ For data extraction, utilize the `old_org_credentials.json` file, <br>
+For data insertion, make use of the `new_org_credentials.json` file<br>
+Right-click on the file and open it using Notepad (double-clicking will not work). Edit the contents as needed, and don't forget to save the changes.
+
+3.  Click on Open Users :
+    update the file [user_emails.py](app/data_extraction/user_emails.py)
+
+4. Close the application and open again using command on terminal:
+    ```
+    python main.py
+    ```
+5. If the script fails for any reason, you will receive an error message on the terminal/cmd. Check the type of exception and the accompanying message. For more detailed information, click the "Show Logs" button to access the frequent errors and logs.
+
+6.  If there are no errors displayed on the terminal/cmd, it indicates that the execution of the script has been completed successfully.
+7. You can locate the extracted/new file by clicking the "Show Files" button.
+
+8. After closing the application,you can press `ctr+c` to kill process on terminal and close the application from taskbar.
+
+9. Go Slow  !!
 
 Feel free to connect if you have any questions! 🤗
 
@@ -108,8 +121,15 @@ salesforce_data_migration/
 ```
 
 ### Possible Errors :
-1. pandas.errors.EmptyDataError: No columns to parse from file
-wh en csv file is empty
+1. pandas.errors.EmptyDataError: <br>
+ No columns to parse from file when csv file is empty
+
+2. simple_salesforce.exceptions.SalesforceAuthenticationFailed: <br>
+Internet connection or VPN or Username password 
+
+3. simple_salesforce.exceptions.SalesforceMalformedRequest: <br>
+Insertion Failed because of Custom Validation (Handled by Salesfore)
+
 
 ### How to extend script
 ## simple chnages:
@@ -117,27 +137,116 @@ wh en csv file is empty
     we can happyly add or remove fileds from query unless that filed is dependend on any other object.
     to make change modifly query in the file
     ``salesforce_data_migration/app/data_extraction/query_strings.py``
+
 2. add new object to extract
     steps
     1. add query in the query file
-    ``path to query file``
+    ``salesforce_data_migration/app/data_extraction/query_strings.py``
+
+        create new variable and store query
+        ex: 
+        ```Python
+        demoobj_query = """
+        SELECT id,chiled_obje1__c,filed1,filed2,email
+        FROM DEMOObj__c
+        WHERE email in {keys}
+        """
+        ```
+
+
     2. add function in extraction file
-    ``path to extraction file``
-    let we have a object with same DEMOObj__c  the the new fucntion will looks like below
-    ```Python
-    @lib.log_function_execution
-    def fetch_demoobj():
-        """
-        Object Name : DEMOObj__c
-        """
-        sf_connection = sf  
-        query = query_strings.demoobj_query 
-        email_keys = user_emails.emails 
-        file_name = export_path('df_demoobj.csv')
+    ``salesforce_data_migration/app/data_extraction/extraction..py``
+    <br>let we have a object with same DEMOObj__c  the the new fucntion will looks like below
 
-        response = lib.execute_soql_query(sf_connection, query,  keys=email_keys)
-        contact_dataframe = lib.api_response_to_dataframe(response)
-        contact_dataframe.to_csv(file_name, index=False)
+        ```Python
+        @lib.log_function_execution
+        def fetch_demoobj():
+            """
+            Object Name : DEMOObj__c
+            """
+            sf_connection = sf  
+            query = query_strings.demoobj_query 
+            email_keys = user_emails.emails 
+            file_name = export_path('df_demoobj.csv')
 
-    ```
+            response = lib.execute_soql_query(sf_connection, query,  keys=email_keys)
+            contact_dataframe = lib.api_response_to_dataframe(response)
+            contact_dataframe.to_csv(file_name, index=False)
+
+        ```
+
+    3. Update `magic_string.py`
+        ```Python
+        extraction_objects = [
+            ...,
+            "DEMOObj__c",
+        ]
+        ```
+    4. Update ``call_api.py``
+        ```Python
+        def _call(script,object):
+            if script == 'EXTRACT':
+                import app.data_extraction.extraction as extract
+                ...
+
+                 if object == 'DEMOObj__c':
+                    logging.info('Started Exicutation for {object}')
+                    extract.fetch_demoobj()
+                    logging.info('END Exicutation for {object}') 
+                ...
+        
+        ```
+        Extraction Script Added 🥳
+    
+    5. Update [insertion.py](app/data_insertion/insertion.py)
+        ```Python
+        @lib.log_function_execution
+        def insert_demoobj():
+            """
+            Object Name : DEMOObj__c
+            """
+            imort_file_path = import_path('df_demoobj.csv')
+            export_file_path = export_path('df_demoobj.csv')
+            object_dataframe = pd.read_csv(imort_file_path)
+            object_dataframe = object_dataframe.fillna('')
+
+            # lookup and update contact related to user
+            ## this chiled_obje1 should be inserted before DEMOObj__c
+            df_lookup_path = export_path('df_chiled_obje1.csv')
+            df_lookup = pd.read_csv(df_lookup_path)
+            object_dataframe = lib.vlookup_id(object_dataframe,df_lookup,'chiled_obje1__c')
+
+            # insert the records
+            for index, row in object_dataframe.iterrows():
+                record = lib.filter_record(row) ## 
+                inserted_record = sf.User.create(record)
+                object_dataframe.at[index, 'new_Id'] = inserted_record['id']
+            
+            # export file
+            object_dataframe.to_csv(export_file_path, index=False)
+        ```
+
+    6. Update `magic_string.py`
+        ```Python
+        insertion_objects = [
+            ...,
+            "DEMOObj__c",
+        ]
+        ```
+    7. Update ``call_api.py``
+        ```Python
+        def _call(script,object):
+            if script == 'INSERT':
+                import app.data_insertion.insertion as insertion
+                ...
+
+                 if object == 'DEMOObj__c':
+                    logging.info('Started Exicutation for {object}')
+                    insertion.insert_users()
+                    logging.info('END Exicutation for {object}') 
+                ...
+        
+        ```
+
+        Insertion Script Added 🥳
 
